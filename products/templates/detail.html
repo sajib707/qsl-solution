@@ -124,7 +124,7 @@
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="number" class="form-control bg-secondary border-0 text-center" value="1">
+                            <input type="number" id="product-qty" class="form-control bg-secondary border-0 text-center" value="1">
                             <div class="input-group-btn">
                                 <button class="btn btn-primary btn-plus">
                                     <i class="fa fa-plus"></i>
@@ -410,11 +410,12 @@
             url: '{% url "cart:cart_add" %}',
             data: {
                 productid: $('#add-button').val(),
-                productqty: $('#select option:selected').text(),
+                productqty: $('#product-qty').val(),
                 csrfmiddlewaretoken: "{{csrf_token}}",
                 action: 'post'
             },
             success: function (json) {
+                location.reload();
                document.getElementById("cart-qty").innerHTML = json.qty
             },
             error: function (xhr, errmsg, err) {}
@@ -423,27 +424,7 @@
 
 </script>
 
-<script>
-    const plus = document.querySelector(".plus"),
-     minus = document.querySelector(".minus"),
-     num = document.querySelector(".num");
-     let a = 1;
-     plus.addEventListener("click", ()=>{
-       a++;
-       a = (a < 10) ? "0" + a : a;
-       num.innerText = a;
-     });
- 
-     minus.addEventListener("click", ()=>{
-       if(a > 1){
-         a--;
-         a = (a < 10) ? "0" + a : a;
-         num.innerText = a;
-       }
-     });
- 
-   </script>
- 
+
 
 {% endblock %}
 

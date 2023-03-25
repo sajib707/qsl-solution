@@ -60,9 +60,15 @@ class Cart():
         if product_id in self.cart:
             self.cart[product_id]['qty'] = qty
         self.save()
-
-    def get_total_price(self):
+    
+    def get_itemtotal_price(self):
+        return (Decimal(item['price']) * item['qty'] for item in self.cart.values())
+    
+    def get_subtotal_price(self):
         return sum(Decimal(item['price']) * item['qty'] for item in self.cart.values())
+    
+    def get_total_price(self):
+        return sum(Decimal(item['price']) * item['qty'] for item in self.cart.values()) + 10
 
     def delete(self, product):
         """

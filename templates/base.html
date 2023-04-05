@@ -169,7 +169,7 @@
                                 <i class="fas fa-shopping-cart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
                                     {% with total_qty=cart|length %}
-                                <div id="basket-qty" class="d-inline-flex">
+                                <div id="cart-qty" class="d-inline-flex">
                                     {% if total_qty > 0 %}
                                     {{ total_qty }}
                                     {% else %}
@@ -279,6 +279,8 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'pyshop/js/main.js' %}"></script>
+
+    
 </body>
 
 </html>

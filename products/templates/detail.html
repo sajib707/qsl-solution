@@ -124,7 +124,7 @@
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="number" id="product-qty" class="form-control bg-secondary border-0 text-center" value="1">
+<input type="number" id="product-qty" class="form-control bg-secondary border-0 text-left" value="1">
                             <div class="input-group-btn">
                                 <button class="btn btn-primary btn-plus">
                                     <i class="fa fa-plus"></i>
@@ -415,7 +415,6 @@
                 action: 'post'
             },
             success: function (json) {
-                location.reload();
                document.getElementById("cart-qty").innerHTML = json.qty
             },
             error: function (xhr, errmsg, err) {}

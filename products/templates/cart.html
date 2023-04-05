@@ -25,25 +25,25 @@
                     <tbody class="align-middle">
                         {% for item in cart %}
                         {% with product=item.product %}
-                        <tr data-index="{{product.id}}">
-                            <td class="align-middle"><img src="{{ product.image.url }}" alt="" style="width: 50px;">{{ product.name }}</td>
-                            <td class="align-middle">{{ product.price }}</td>
+                        <tr data-index="{{product.id}}" class="product-item">
+                            <td class="align-middle"> <a href="{{ product.get_absolute_url }}" style="color: #22241fe5; text-decoration: none;" > <img src="{{ product.image.url }}" alt="" style="width: 50px;">      {{product.name }} </a></td>
+                            <td class="align-middle" >{{ product.price }}</td>
                             <td class="align-middle" id="{{product.id}}">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">
-                                        <button id="update-button" data-index="{{product.id}}" class="btn btn-sm btn-primary btn-minus" >
+                                        <button id="update-button" data-index="{{product.id}}" class="btn btn-sm btn-primary btn-minus update-qty" >
                                         <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-<input id="cart-qty" type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="{{item.qty}}">
+<input  type="number" id="input{{product.id}}" class="form-control form-control-sm bg-secondary border-0 text-center update-qty" value="{{item.qty}}">
                                     <div class="input-group-btn">
-                                        <button id="update-button" data-index="{{product.id}}" class="btn btn-sm btn-primary btn-plus">
+                                        <button id="update-button" data-index="{{product.id}}" class="btn btn-sm btn-primary btn-plus update-qty">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                             </td>
-                            <td class="align-middle"> {{ product.price|mul:item.qty }}</td>
+                            <td class="align-middle"> {{ item.total_price }}</td>
 <td class="align-middle"><button id="delete-button" data-index="{{product.id}}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button></td>
                         </tr>
                         {% endwith %}
@@ -63,9 +63,9 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="border-bottom pb-2">
-                        <div id="subtotal" class="d-flex justify-content-between mb-3">
+                        <div class="d-flex justify-content-between mb-3">
                             <h6>Subtotal</h6>
-                            <h6>$ {{cart.get_subtotal_price}}</h6>
+                            <h6 id="subtotal">$ {{cart.get_subtotal_price}}</h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Shipping</h6>
@@ -73,9 +73,9 @@
                         </div>
                     </div>
                     <div class="pt-2">
-                        <div id="carttotal" class="d-flex justify-content-between mt-2">
+                        <div class="d-flex justify-content-between mt-2">
                             <h5>Total</h5>
-                            <h5>$ {{cart.get_total_price}}</h5>
+                            <h5 id="carttotal">$ {{cart.get_total_price}}</h5>
                         </div>
                         <button class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</button>
                     </div>
@@ -99,7 +99,6 @@
                 action: 'post'
             },
             success: function (json) {
-                location.reload();
                 $('.product-item[data-index="' + prodid + '"]').remove();
                 document.getElementById("subtotal").innerHTML = json.subtotal;
                 document.getElementById("carttotal").innerHTML = json.carttotal;
@@ -110,7 +109,7 @@
     })
 
     // Update Item
-    $(document).on('click', '#update-button', function (e) {
+    $(document).on('click', '.update-qty', function (e) {
         e.preventDefault();
         var prodid = $(this).data('index');
         $.ajax({
@@ -118,13 +117,12 @@
             url: '{% url "cart:cart_update" %}',
             data: {
                 productid: $(this).data('index'),
-                productqty: $('#select' + prodid + 'option:selected').val(),
-                productqty: $('#cart-qty').val(),
+                productqty:  $('#input' + prodid).val(),
                 csrfmiddlewaretoken: "{{csrf_token}}",
                 action: 'post'
             },
             success: function (json) {
-                location.reload();
+                location.reload()
                 document.getElementById("cart-qty").innerHTML = json.qty
                 document.getElementById("subtotal").innerHTML = json.subtotal
                 document.getElementById("carttotal").innerHTML = json.carttotal

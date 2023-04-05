@@ -43,8 +43,8 @@ def cart_update(request):
     if request.POST.get('action') == 'post':
         product_id = int(request.POST.get('productid'))
         product_qty = int(request.POST.get('productqty'))
-        print("product_id " + str(product_id) + " product_qty " + str(product_qty))
         cart.update(product=product_id, qty=product_qty)
+
 
         cartqty = cart.__len__()
         carttotal = cart.get_total_price()

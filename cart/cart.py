@@ -1,5 +1,7 @@
 from decimal import Decimal
 
+from django.conf import settings
+
 from products.models import Product
 
 
@@ -11,9 +13,9 @@ class Cart():
 
     def __init__(self, request):
         self.session = request.session
-        cart = self.session.get('skey')
-        if 'skey' not in request.session:
-            cart = self.session['skey'] = {}
+        cart = self.session.get(settings.CART_SESSION_ID)
+        if settings.CART_SESSION_ID not in request.session:
+            cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
     def add(self, product, qty):
@@ -78,6 +80,13 @@ class Cart():
             del self.cart[product_id]
             print(product_id)
             self.save()
+
+
+    def clear(self):
+        # Remove cart from session
+        del self.session[settings.CART_SESSION_ID]
+        self.save()
+
 
     def save(self):
         self.session.modified = True

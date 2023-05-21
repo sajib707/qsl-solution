@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from products.models import Product
@@ -5,9 +6,10 @@ from .cart import Cart
 from decimal import Decimal
 
 
+@login_required
 def cart_details(request):
     cart = Cart(request)
-    return render(request, 'cart.html')
+    return render(request, 'cart/cart.html')
 
 
 def cart_add(request):
@@ -49,6 +51,7 @@ def cart_update(request):
         cartqty = cart.__len__()
         carttotal = cart.get_total_price()
         subtotal = cart.get_subtotal_price()
-        response = JsonResponse({'qty': cartqty, 'subtotal':subtotal, 'carttotal': carttotal})
+        response = JsonResponse({'qty': cartqty, 'subtotal':subtotal, 'carttotal': carttotal
+        })
         return response
 

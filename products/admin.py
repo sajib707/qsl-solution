@@ -1,25 +1,41 @@
+from django import forms
 from django.contrib import admin
-from .models import Product, Service, Category, Items
+from mptt.admin import MPTTModelAdmin
 
+from .models import (
+    Category,
+    Product,
+    ProductImage,
+    ProductSpecification,
+    ProductSpecificationValue,
+    ProductType,
+)
+
+admin.site.register(Category, MPTTModelAdmin)
+
+
+class ProductSpecificationInline(admin.TabularInline):
+    model = ProductSpecification
+
+
+@admin.register(ProductType)
+class ProductTypeAdmin(admin.ModelAdmin):
+    inlines = [
+        ProductSpecificationInline,
+    ]
+
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+
+
+class ProductSpecificationValueInline(admin.TabularInline):
+    model = ProductSpecificationValue
+
+
+@admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name','price','in_stock', 'is_active')
-    prepopulated_fields = {'slug': ('name',)}
-
-admin.site.register(Product, ProductAdmin)
-
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('name','price')
-
-admin.site.register(Service, ServiceAdmin)
-
-class ItemAdmin(admin.ModelAdmin):
-    list_display = ('name','price','slug')
-
-admin.site.register(Items, ItemAdmin)
-
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name','cat_slug')
-    prepopulated_fields = {'cat_slug': ('name',)}
-
-admin.site.register(Category, CategoryAdmin)
-
+    inlines = [
+        ProductSpecificationValueInline,
+        ProductImageInline,
+    ]

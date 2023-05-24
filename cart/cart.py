@@ -27,7 +27,7 @@ class Cart():
         if product_id in self.cart:
             self.cart[product_id]['qty'] = qty
         else:
-            self.cart[product_id] = {'price': str(product.price), 'qty': qty}
+            self.cart[product_id] = {'price': str(product.discount_price), 'qty': qty}
 
         self.save()
 
@@ -37,7 +37,7 @@ class Cart():
         and return products
         """
         product_ids = self.cart.keys()
-        products = Product.products.filter(id__in=product_ids)
+        products = Product.objects.filter(id__in=product_ids)
         cart = self.cart.copy()
 
         for product in products:

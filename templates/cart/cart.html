@@ -26,8 +26,12 @@
                         {% for item in cart %}
                         {% with product=item.product %}
                         <tr data-index="{{product.id}}" class="product-item">
-                            <td class="align-middle"> <a href="{{ product.get_absolute_url }}" style="color: #22241fe5; text-decoration: none;" > <img src="{{ product.image.url }}" alt="" style="width: 50px;">      {{product.name }} </a></td>
-                            <td class="align-middle" >{{ product.price }}</td>
+                            {% for image in product.product_image.all %}
+                            {% if image.is_feature %}
+                            <td class="align-middle"> <a href="{{ product.get_absolute_url }}" style="color: #22241fe5; text-decoration: none;" > <img src="{{ image.image.url }}" alt="" style="width: 50px;">  {{product.title }} </a></td>
+                            {% endif %}
+                            {% endfor %}
+                            <td class="align-middle" >{{ product.discount_price }}</td>
                             <td class="align-middle" id="{{product.id}}">
                                 <div class="input-group quantity mx-auto" style="width: 100px;">
                                     <div class="input-group-btn">

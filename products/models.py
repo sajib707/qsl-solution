@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -18,7 +19,6 @@ class Category(MPTTModel):
     slug = models.SlugField(verbose_name=_("Category safe URL"), max_length=255, unique=True)
     parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
     is_active = models.BooleanField(default=True)
-    image = models.ImageField(upload_to='images/', default='images/default.png')
 
     class MPTTMeta:
         order_insertion_by = ["name"]
@@ -111,6 +111,7 @@ class Product(models.Model):
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    users_wishlist = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="user_wishlist", blank=True)
 
     class Meta:
         ordering = ("-created_at",)
@@ -156,7 +157,7 @@ class ProductImage(models.Model):
         verbose_name=_("image"),
         help_text=_("Upload a product image"),
         upload_to="images/",
-        default="images/default.jpg",
+        default="images/default.png",
     )
     alt_text = models.CharField(
         verbose_name=_("Alturnative text"),

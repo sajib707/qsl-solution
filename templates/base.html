@@ -52,12 +52,10 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            {% if user.is_authenticated %}
-                            <button class="dropdown-item" onclick="location.href='/account/logout/'" type="button">Sign out</button>
-                            {% else %}
+
                             <button class="dropdown-item" onclick="location.href='/account/login/'" type="button">Sign in</button>
                             <button class="dropdown-item" onclick="location.href='/account/register/'" type="button">Sign up</button>
-                            {% endif %}
+
                         </div>
                     </div>
                     <div class="btn-group mx-2">
@@ -153,39 +151,16 @@
                         <div class="navbar-nav mr-auto py-0">
                             <a href="/index" class="nav-item nav-link active">Home</a>
                             <a href="/shop" class="nav-item nav-link">Shop</a>
-                            <a href="" class="nav-item nav-link">Extra Page</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
-                                <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-                                    <a href="cart.html" class="dropdown-item">Shopping Cart</a>
-                                    <a href="checkout.html" class="dropdown-item">Checkout</a>
-                                </div>
-                            </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                             <a href="" class="btn px-0">
                                 <i class="fas fa-heart text-primary"></i>
                                 <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
                             </a>
-                            <a href="{% url 'cart:cart_details' %}" class="btn px-0 ml-3">
+                            <a href="" class="btn px-0 ml-3">
                                 <i class="fas fa-shopping-cart text-primary"></i>
-                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">
-                                    {% with total_qty=cart|length %}
-                                <div id="cart-qty" class="d-inline-flex">
-                                    {% if total_qty > 0 %}
-                                    {{ total_qty }}
-                                    {% else %}
-                                    0
-                                    {% endif %}
-                                </div>
-                                {% endwith %}</span>
+                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
                             </a>
-                            {% if user.is_authenticated %}
-                            <a href="{% url "account:dashboard" %}" class="btn px-0">
-                                <i class="fas fa-user text-primary" style="padding-left: 10px;"></i>
-                            </a>
-                            {% endif %}
                         </div>
                     </div>
                 </nav>

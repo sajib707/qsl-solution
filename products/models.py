@@ -3,6 +3,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
+from django.contrib.auth.models import User
 
 
 class Category(MPTTModel):
@@ -19,6 +20,12 @@ class Category(MPTTModel):
     slug = models.SlugField(verbose_name=_("Category safe URL"), max_length=255, unique=True)
     parent = TreeForeignKey("self", on_delete=models.CASCADE, null=True, blank=True, related_name="children")
     is_active = models.BooleanField(default=True)
+    image = models.ImageField(
+        verbose_name=_("image"),
+        help_text=_("Upload a category image"),
+        upload_to="images/",
+        default="images/default.png",
+    )
 
     class MPTTMeta:
         order_insertion_by = ["name"]

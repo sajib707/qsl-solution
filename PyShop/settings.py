@@ -38,13 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'products.apps.ProductsConfig',
-    'cart',
-    'account',
-    'orders',
-    'payment',
-    'mathfilters',
-    "mptt",
-
 ]
 
 MIDDLEWARE = [
@@ -73,23 +66,12 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'products.views.categories',
-                'cart.context_processors.cart'
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'PyShop.wsgi.application'
-
-
-
-if DEBUG:
-    STRIPE_PUBLISHABLE_KEY = 'pk_test_51N7Hz4J3t7qnvvPUGytayKfUrhfJ6ddcoMEIJU8ptQcIBeKeIINjfE13tfItB8LAiDA0ULVkJjD6YMXgHNlF5el900IuA6hnZN'
-    STRIPE_SECRET_KEY = 'sk_test_51N7Hz4J3t7qnvvPUIfuyfwz6vX2LanurAnw9Gc4R2Its2ec22cDoLSTZsFjwLWRTLz9XA8ujMsyYebbnKJeatNhc00DdYN1ovc'
-# Uncomment these lines if you have a live keys
-# else:
-#     STRIPE_PUBLISHABLE_KEY = 'production_publishable_key'
-#     STRIPE_SECRET_KEY = 'production_secret_key'
 
 
 # Database
@@ -144,19 +126,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
-
-
-# Custom user model
-AUTH_USER_MODEL = 'account.Customer'
-LOGIN_REDIRECT_URL = '/account/dashboard'
-LOGIN_URL = '/account/login/'
-
-#Cart session id
-CART_SESSION_ID = 'cart'
-
-# Email setting
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -87,6 +87,25 @@ class Product(models.Model):
         help_text=_("Required"),
         max_length=255,
     )
+    brand = models.CharField(
+        verbose_name=_("brand"),
+        help_text=_("Required"),
+        max_length=255,
+    )
+    color = models.CharField(
+        verbose_name=_("color"),
+        help_text=_("Required"),
+        max_length=255,
+    )
+    seller = models.CharField(
+        verbose_name=_("seller"),
+        help_text=_("Required"),
+        max_length=255,
+    )
+    warranty = models.IntegerField(
+        verbose_name=_("warranty"),
+        help_text=_("Required"),
+    )
     description = models.TextField(verbose_name=_("description"), help_text=_("Not Required"), blank=True)
     slug = models.SlugField(max_length=255)
     regular_price = models.DecimalField(
@@ -138,7 +157,7 @@ class ProductSpecificationValue(models.Model):
     products individual specification or bespoke features.
     """
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_spec")
     specification = models.ForeignKey(ProductSpecification, on_delete=models.RESTRICT)
     value = models.CharField(
         verbose_name=_("value"),

@@ -1,10 +1,16 @@
-{% extends 'base.html' %}
+{% extends '../base.html' %}
 
-{% load static %}
-
-<body>
 
 {% block content %}
+
+<style>
+    .img {
+        float: left;
+        width:  200px;
+        height: 200px;
+        background-size: cover;
+    }
+</style>
 
 
     <!-- Breadcrumb Start -->
@@ -30,7 +36,7 @@
                 <!-- Price Start -->
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form class="product-filter">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="price-all">
                             <label class="custom-control-label" for="price-all">All Price</label>
@@ -48,17 +54,17 @@
                 <!-- Color Start -->
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form class="product-filter">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all">
-                            <label class="custom-control-label" for="price-all">All Color</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <input type="checkbox" class="custom-control-input" checked id="color-all" name="color">
+                            <label class="custom-control-label" for="color-all">All Color</label>
                         </div>
+                        {% for color in colors %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-1">
-                            <label class="custom-control-label" for="color-1">Black</label>
-                            <span class="badge border font-weight-normal">150</span>
+                            <input type="checkbox" class="custom-control-input" id="color-{{ color }}" name="color" value="{{ color }}">
+                            <label class="custom-control-label" for="color-{{ color }}">{{ color }}</label>
                         </div>
+                        {% endfor %}
                     </form>
                 </div>
                 <!-- Color End -->
@@ -66,22 +72,22 @@
                 <!-- Size Start -->
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Brand</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form id="filter-form" method="GET" action="{% url 'products:list_products'  %}">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All Brands</label>
-                            <span class="badge border font-weight-normal">1000</span>
+                            <input class="custom-control-input" type="checkbox" id="brand-all">
+                            <label class="custom-control-label" for="brand-all">All Brands</label>
                         </div>
+                        {% for brand in brands %}
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                            <span class="badge border font-weight-normal">150</span>
+                            <input class="custom-control-input brand-checkbox" type="checkbox" id="brand-{{ brand }}" name="brand" value="{{ brand }}" {% if brand in selected_brands %}checked{% endif %}>
+                            <label class="custom-control-label" for="brand-{{ brand }}">{{ brand }}</label>
                         </div>
+                        {% endfor %}
                     </form>
                 </div>
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Warranty</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form class="product-filter">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="size-all">
                             <label class="custom-control-label" for="size-all">All Warranty</label>
@@ -96,7 +102,7 @@
                 </div>
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Product Type</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form class="product-filter">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="size-all">
                             <label class="custom-control-label" for="size-all">All Type</label>
@@ -111,7 +117,7 @@
                 </div>
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Seller</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form>
+                    <form class="product-filter">
                         <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                             <input type="checkbox" class="custom-control-input" checked id="size-all">
                             <label class="custom-control-label" for="size-all">All Seller</label>
@@ -133,8 +139,11 @@
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <div>
-                                <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
-                                <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
+                                <form method="GET" action="/list_products/" class="d-flex">
+                                <input class="form-control me-2" name="search" id="search" type="search" placeholder="Search"
+                                  aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                                </form>
                             </div>
                             <div class="ml-2">
                                 <div class="btn-group">
@@ -145,31 +154,21 @@
                                         <a class="dropdown-item" href="#">Price High to Low</a>
                                     </div>
                                 </div>
-                                <div class="btn-group ml-2">
-                                    <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Showing</button>
-                                    <div class="dropdown-menu dropdown-menu-right">
-                                        <a class="dropdown-item" href="#">10</a>
-                                        <a class="dropdown-item" href="#">20</a>
-                                        <a class="dropdown-item" href="#">30</a>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row px-xl-5">
+                    <div id="filtered-products" class="row px-xl-5">
                         {% for product in products %}
                         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
                             <div class="product-item bg-light mb-4">
                                 <div class="product-img position-relative overflow-hidden">
                                     {% for image in product.product_image.all %}
                                     {% if image.is_feature %}
-                                    <img class="img-fluid w-100" src="{{image.image.url}}" alt="">
+                                    <img class="image-fluid w-100" alt="Responsive image" src="{{ image.image.url }}"  alt="{{ image.image.alt_text }}">
                                     <div class="product-action">
-                                        <a class="btn btn-outline-dark btn-square" href=""><i
-                                                class="fa fa-shopping-cart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
                                         <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i
-                                                class="fa fa-sync-alt"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                         <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
                                     </div>
                                     {% endif %}
@@ -232,9 +231,89 @@
     </div>
     <!-- Shop End -->
 
+
+<script>
+
+  // for getting the sorting status to be displayed in sorting dropdown placeholder
+  function get(name) {
+    if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))  //location.search give query sling part
+      return decodeURIComponent(name[1]);
+  }
+
+  if(get('ordering'))
+  document.getElementById('placeholder').innerHTML = "Sort: " + document.getElementById(get('ordering')).innerHTML;
+
+  if(get('price'))
+  document.getElementById('price-placeholder').innerHTML = "Price: " + document.getElementById('pr'+get('price')).innerHTML;
+
+
+
+  
+  
+
+  // for getting url after applying ordering
+  function finalurl() {
+    var url = new URL(window.location.href);
+    var search_params = url.searchParams;
+    search_params.set('ordering', document.getElementById("sort-list").value);
+    url.search = search_params.toString();
+    var new_url = url.toString();
+    return new_url
+  }
+  
+  // for getting url after applying price filtering
+  function finalurl2() {
+    var url = new URL(window.location.href);
+    var search_params = url.searchParams;
+    search_params.set('price', document.getElementById("price-list").value);
+    url.search = search_params.toString();
+    var new_url = url.toString();
+    return new_url
+  }
+
+//Product filtering
+$(document).ready(function() {
+    console.log("Document ready!");
+
+    // Handle checkbox change event
+    $(document).on('change', '.brand-checkbox', function() {
+        // Get the selected checkbox values
+        var selectedBrands = $('input[name="brand"]:checked').map(function() {
+            return this.value;
+        }).get();
+
+        // AJAX request to update filtered products
+        $.ajax({
+            type: "GET",
+            url: "{% url 'products:list_products' %}",
+            data: {
+                brand: selectedBrands,
+            },
+            success: function(data) {
+                // Update the filtered products container
+                $('#filtered-products').html(data);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+    });
+});
+
+
+</script>
+
+
+<script>
+    // for giving suggestions in search box by calling an API
+    $(function () {
+      $("#search").autocomplete({
+        source: '/suggestionapi/',  // Update the URL here
+        minLength: 2
+      });
+    });
+  </script>
+
+
 {% endblock %}
-
-</body>
-
-</html>
 

@@ -4,11 +4,9 @@
 {% block content %}
 
 <style>
-    .img {
-        float: left;
-        width:  200px;
-        height: 200px;
-        background-size: cover;
+    .product-image {
+        height: 200px; 
+        object-fit: cover;
     }
 </style>
 
@@ -34,6 +32,15 @@
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
                 <!-- Price Start -->
+                <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Product Type</span></h6>
+                <div class="bg-light p-4 mb-30">
+                    <form id="productTypeFilterForm" method="GET">
+                        {% for product_type in product_types %}
+                            <input type="checkbox" name="product_type" value="{{ product_type }}" id="{{ product_type }}" class="product-type-checkbox">
+                            <label for="{{ product_type }}">{{ product_type }}</label>
+                        {% endfor %}
+                    </form>
+                </div>
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h6>
                 <div class="bg-light p-4 mb-30">
                     <form class="product-filter">
@@ -54,17 +61,11 @@
                 <!-- Color Start -->
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by color</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form class="product-filter">
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="color-all" name="color">
-                            <label class="custom-control-label" for="color-all">All Color</label>
-                        </div>
-                        {% for color in colors %}
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="color-{{ color }}" name="color" value="{{ color }}">
-                            <label class="custom-control-label" for="color-{{ color }}">{{ color }}</label>
-                        </div>
-                        {% endfor %}
+                    <form id="colorFilterForm" method="GET">
+                      {% for color in colors %}
+                          <input type="checkbox" name="color" value="{{ color }}" id="{{ color }}" class="color-checkbox">
+                          <label for="{{ color }}">{{ color }}</label>
+                      {% endfor %}
                     </form>
                 </div>
                 <!-- Color End -->
@@ -72,18 +73,12 @@
                 <!-- Size Start -->
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Brand</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form id="filter-form" method="GET" action="{% url 'products:list_products'  %}">
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input class="custom-control-input" type="checkbox" id="brand-all">
-                            <label class="custom-control-label" for="brand-all">All Brands</label>
-                        </div>
-                        {% for brand in brands %}
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input class="custom-control-input brand-checkbox" type="checkbox" id="brand-{{ brand }}" name="brand" value="{{ brand }}" {% if brand in selected_brands %}checked{% endif %}>
-                            <label class="custom-control-label" for="brand-{{ brand }}">{{ brand }}</label>
-                        </div>
-                        {% endfor %}
-                    </form>
+                  <form id="brandFilterForm" method="GET">
+                    {% for brand in brands %}
+                        <input type="checkbox" name="brand" value="{{ brand }}" id="{{ brand }}" class="brand-checkbox">
+                        <label for="{{ brand }}">{{ brand }}</label>
+                    {% endfor %}
+                </form>
                 </div>
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Warranty</span></h6>
                 <div class="bg-light p-4 mb-30">
@@ -157,42 +152,41 @@
                             </div>
                         </div>
                     </div>
-                    <div id="filtered-products" class="row px-xl-5">
+                    <div id="productList" class="row px-xl-5">
                         {% for product in products %}
                         <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
-                            <div class="product-item bg-light mb-4">
-                                <div class="product-img position-relative overflow-hidden">
-                                    {% for image in product.product_image.all %}
-                                    {% if image.is_feature %}
-                                    <img class="image-fluid w-100" alt="Responsive image" src="{{ image.image.url }}"  alt="{{ image.image.alt_text }}">
-                                    <div class="product-action">
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
-                                    </div>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                                <div class="text-center py-4">
-                                    <a class="h6 text-decoration-none text-truncate"
-                                       href="{{ product.get_absolute_url }}">{{product.title}}</a>
-                                    <div class="d-flex align-items-center justify-content-center mt-2">
-                                        <h6>{{product.discount_price}}</h6>
-                                        <h6 class="text-muted ml-2">
-                                            <del>{{product.regular_price}}</del>
-                                        </h6>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-center mb-1">
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small>(99)</small>
-                                    </div>
-                                </div>
+                          <div class="product-item bg-light mb-4">
+                            <div class="product-img position-relative overflow-hidden">
+                              {% for image in product.product_image.all %}
+                              {% if image.is_feature %}
+                              <img class="product-image image-fluid w-100" alt="Responsive image" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}">
+                              <div class="product-action">
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                              </div>
+                              {% endif %}
+                              {% endfor %}
                             </div>
+                            <div class="text-center py-4">
+                              <a class="h6 text-decoration-none text-truncate" href="{{ product.get_absolute_url }}">{{product.title}}</a>
+                              <div class="d-flex align-items-center justify-content-center mt-2">
+                                <h6>{{product.discount_price}}</h6>
+                                <h6 class="text-muted ml-2">
+                                  <del>{{product.regular_price}}</del>
+                                </h6>
+                              </div>
+                              <div class="d-flex align-items-center justify-content-center mb-1">
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small>(99)</small>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                         {% endfor %}
                     </div>
@@ -247,10 +241,6 @@
   document.getElementById('price-placeholder').innerHTML = "Price: " + document.getElementById('pr'+get('price')).innerHTML;
 
 
-
-  
-  
-
   // for getting url after applying ordering
   function finalurl() {
     var url = new URL(window.location.href);
@@ -273,46 +263,74 @@
 
 //Product filtering
 $(document).ready(function() {
-    console.log("Document ready!");
-
-    // Handle checkbox change event
-    $(document).on('change', '.brand-checkbox', function() {
-        // Get the selected checkbox values
-        var selectedBrands = $('input[name="brand"]:checked').map(function() {
-            return this.value;
-        }).get();
-
-        // AJAX request to update filtered products
-        $.ajax({
-            type: "GET",
-            url: "{% url 'products:list_products' %}",
-            data: {
-                brand: selectedBrands,
-            },
-            success: function(data) {
-                // Update the filtered products container
-                $('#filtered-products').html(data);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-            }
-        });
+    $('.brand-checkbox, .warranty-checkbox, .seller-checkbox, .color-checkbox, .product-type-checkbox').change(function() {
+        filterProducts();
     });
 });
 
+function filterProducts() {
+    var brandFormData = $('#brandFilterForm').serialize();
+    var colorFormData = $('#colorFilterForm').serialize();
+    var productTypeFormData = $('#productTypeFilterForm').serialize();
 
-</script>
 
+    $.ajax({
+        url: '/list_products/',
+        data: brandFormData + '&' + colorFormData + '&' + productTypeFormData,
+        dataType: 'json',
+        success: function(response) {
+            var products = response.products;
+            var productList = $('#productList');
+            productList.empty(); // Clear existing products
 
-<script>
-    // for giving suggestions in search box by calling an API
-    $(function () {
-      $("#search").autocomplete({
-        source: '/suggestionapi/',  // Update the URL here
-        minLength: 2
-      });
+            $.each(products, function(index, product) {
+                var productItem = $('<div class="col-lg-3 col-md-4 col-sm-6 pb-1 product-item"></div>');
+                var innerHtml = `
+                    <div class="product-item bg-light mb-4">
+                        <div class="product-image product-img position-relative overflow-hidden">
+                            ${getImageHtml(product.product_images)}
+                            <div class="product-action">
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center py-4">
+                            <a class="h6 text-decoration-none text-truncate" href="${product.get_absolute_url}">${product.title}</a>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                <h6>${product.discount_price}</h6>
+                                <h6 class="text-muted ml-2">
+                                    <del>${product.regular_price}</del>
+                                </h6>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center mb-1">
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small>(99)</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                productItem.html(innerHtml);
+                productList.append(productItem);
+            });
+        }
     });
-  </script>
+}
+
+function getImageHtml(images) {
+    var html = '';
+    $.each(images, function(index, imageUrl) {
+        html += `<img class="image-fluid w-100" alt="Responsive image" src="${imageUrl}">`;
+    });
+    return html;
+}
+    
+</script>
 
 
 {% endblock %}

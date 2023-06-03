@@ -1,10 +1,11 @@
 
 from functools import reduce
-import operator
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from .models import Product, Category, ProductType
 from django.db.models import Q
+from django.core.paginator import EmptyPage, Paginator
+PRODUCTS_PER_PAGE = 12
 
 
 def categories(request):
@@ -29,10 +30,17 @@ def list_products(request):
         selected_sellers = request.GET.getlist('seller')
         selected_colors = request.GET.getlist('color')
         selected_product_types = request.GET.getlist('product_type')
+        price_range = request.GET.get('price_range')
 
 
         filtered_products = Product.objects.all()
 
+
+        if price_range:
+            min_price, max_price = price_range.split('-')
+            filtered_products = filtered_products.filter(discount_price__gte=min_price, discount_price__lte=max_price)
+
+        
         if selected_product_types:
             product_types = ProductType.objects.filter(name__in=selected_product_types)
             filtered_products = filtered_products.filter(product_type__in=product_types)
@@ -109,6 +117,16 @@ def list_products(request):
         if ordering:
             filtered_products = filtered_products.order_by(ordering)
 
+        # Pagination
+        page = request.GET.get('page',1)
+        product_paginator = Paginator(filtered_products, PRODUCTS_PER_PAGE)
+        try:
+            filtered_products = product_paginator.page(page)
+        except EmptyPage:
+            filtered_products = product_paginator.page(product_paginator.num_pages)
+        except:
+            filtered_products = product_paginator.page(PRODUCTS_PER_PAGE)
+
         context = {
             'brands': brands,
             'warranties': warranties,
@@ -121,7 +139,9 @@ def list_products(request):
             'selected_product_types': selected_product_types,
             'products': filtered_products,
             'product_types': ProductType.objects.all(),
-
+            'page_obj':filtered_products, 
+            'is_paginated':True, 
+            'paginator':product_paginator,
         }
 
         return render(request, 'products/listproducts.html', context)

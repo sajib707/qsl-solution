@@ -43,17 +43,31 @@
                 </div>
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by price</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form class="product-filter">
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="price-all">
-                            <label class="custom-control-label" for="price-all">All Price</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="price-1">
-                            <label class="custom-control-label" for="price-1">$0 - $100</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
+                    <form id="priceFilterForm">
+                      <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input price-checkbox" name="price_range" value="all" id="price-all" checked>
+                        <label class="custom-control-label" for="price-all">All Price</label>
+                    </div>
+                      <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input price-checkbox" name="price_range" value="1-250" id="price-1">
+                        <label class="custom-control-label" for="price-1">$1 - $250</label>
+                        <span class="badge border font-weight-normal">150</span>
+                      </div>
+                      <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input price-checkbox" name="price_range" value="251-500" id="price-2">
+                        <label class="custom-control-label" for="price-2">$251 - $500</label>
+                        <span class="badge border font-weight-normal">150</span>
+                      </div>
+                      <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input price-checkbox" name="price_range" value="501-750" id="price-3">
+                        <label class="custom-control-label" for="price-3">$501 - $750</label>
+                        <span class="badge border font-weight-normal">150</span>
+                      </div>
+                      <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" class="custom-control-input price-checkbox" name="price_range" value="751-999" id="price-4">
+                        <label class="custom-control-label" for="price-4">$751 - $999</label>
+                        <span class="badge border font-weight-normal">150</span>
+                      </div>
                     </form>
                 </div>
                 <!-- Price End -->
@@ -80,51 +94,28 @@
                     {% endfor %}
                 </form>
                 </div>
+
+                <!-- Warranty Start -->
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Warranty</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form class="product-filter">
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All Warranty</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                    </form>
-                </div>
-                <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Product Type</span></h6>
-                <div class="bg-light p-4 mb-30">
-                    <form class="product-filter">
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All Type</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                    </form>
-                </div>
+                    <form id="warrantyFilterForm" method="GET">
+                      {% for warranty in warranties %}
+                          <input type="checkbox" name="warranty" value="{{ warranty }}" id="{{ warranty }}" class="warranty-checkbox">
+                          <label for="{{ warranty }}">{{ warranty }} Year</label>
+                      {% endfor %}
+                  </form>
+                  </div>
+
+                <!-- Seller Start -->
                 <h6 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filter by Seller</span></h6>
                 <div class="bg-light p-4 mb-30">
-                    <form class="product-filter">
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" checked id="size-all">
-                            <label class="custom-control-label" for="size-all">All Seller</label>
-                            <span class="badge border font-weight-normal">1000</span>
-                        </div>
-                        <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                            <input type="checkbox" class="custom-control-input" id="size-1">
-                            <label class="custom-control-label" for="size-1">XS</label>
-                            <span class="badge border font-weight-normal">150</span>
-                        </div>
-                    </form>
-                </div>                
+                    <form id="sellerFilterForm" method="GET">
+                      {% for seller in sellers %}
+                          <input type="checkbox" name="seller" value="{{ seller }}" id="{{ seller }}" class="seller-checkbox">
+                          <label for="{{ seller }}">{{ seller }}</label>
+                      {% endfor %}
+                  </form>
+                  </div>               
             </div>
             
 
@@ -171,6 +162,7 @@
                             </div>
                             <div class="text-center py-4">
                               <a class="h6 text-decoration-none text-truncate" href="{{ product.get_absolute_url }}">{{product.title}}</a>
+                              <br><a class="h6 text-decoration-none text-truncate" href="{{ product.get_absolute_url }}">{{product.brand}}</a>
                               <div class="d-flex align-items-center justify-content-center mt-2">
                                 <h6>{{product.discount_price}}</h6>
                                 <h6 class="text-muted ml-2">
@@ -271,12 +263,14 @@ $(document).ready(function() {
 function filterProducts() {
     var brandFormData = $('#brandFilterForm').serialize();
     var colorFormData = $('#colorFilterForm').serialize();
+    var warrantyFormData = $('#warrantyFilterForm').serialize();
+    var sellerFormData = $('#sellerFilterForm').serialize();
     var productTypeFormData = $('#productTypeFilterForm').serialize();
 
 
     $.ajax({
         url: '/list_products/',
-        data: brandFormData + '&' + colorFormData + '&' + productTypeFormData,
+        data: brandFormData + '&' + colorFormData + '&' + warrantyFormData + '&' + sellerFormData + '&' + productTypeFormData,
         dataType: 'json',
         success: function(response) {
             var products = response.products;
@@ -328,8 +322,9 @@ function getImageHtml(images) {
         html += `<img class="image-fluid w-100" alt="Responsive image" src="${imageUrl}">`;
     });
     return html;
-}
-    
+} 
+
+
 </script>
 
 

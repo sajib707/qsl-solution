@@ -1,4 +1,6 @@
 
+from functools import reduce
+import operator
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from .models import Product, Category, ProductType
@@ -123,8 +125,8 @@ def list_products(request):
         }
 
         return render(request, 'products/listproducts.html', context)
-    
 
+    
 
 def suggestionApi(request):
     if 'term' in request.GET:
